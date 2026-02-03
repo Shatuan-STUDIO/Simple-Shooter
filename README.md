@@ -7,7 +7,7 @@
 - 多人在线对战
 - 无尽地图探索
 - NPC和BOSS战斗
-- 实时聊天和玩家列表
+- 实时的玩家列表
 - 服务器管理命令
 - 响应式设计，支持PC和移动端
 - 炫酷的粒子特效和光影效果
@@ -146,5 +146,6 @@ Simple-Shooter/
 GNU General Public License v3.0
 
 ## 贡献
+
 
 欢迎提交Issue和Pull Request来改进这个项目。
