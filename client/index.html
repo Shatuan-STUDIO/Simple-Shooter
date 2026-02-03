@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Shooter - 多人无尽射击游戏</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- 主界面 -->
+    <div id="main-menu" class="screen">
+        <div class="menu-container">
+            <h1 class="game-title">Simple Shooter</h1>
+            <div class="form-group">
+                <label for="server-ip">服务器地址</label>
+                <input type="text" id="server-ip" placeholder="例如: localhost" value="localhost">
+            </div>
+            <div class="form-group">
+                <label for="server-port">端口</label>
+                <input type="number" id="server-port" placeholder="例如: 25596" value="25596">
+            </div>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" placeholder="输入用户名" maxlength="16" pattern="[a-zA-Z0-9_]+">
+            </div>
+            <button id="connect-btn" class="btn primary">连接</button>
+            <div id="connection-status" class="status-message"></div>
+        </div>
+    </div>
+
+    <!-- 游戏界面 -->
+    <div id="game-screen" class="screen hidden">
+        <!-- 游戏画布 -->
+        <canvas id="game-canvas"></canvas>
+        
+        <!-- UI元素 -->
+        <div id="game-ui">
+            <!-- 暂停按钮 -->
+            <button id="pause-btn" class="btn pause-btn">暂停</button>
+            
+            <!-- 分数显示 -->
+            <div id="score-display" class="score-display">
+                <div class="score-label">分数</div>
+                <div id="score-value" class="score-value">0</div>
+            </div>
+            
+            <!-- 玩家列表 -->
+            <div id="player-list" class="player-list">
+                <div class="list-header">玩家列表</div>
+                <div id="player-list-content" class="list-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 暂停菜单 -->
+    <div id="pause-menu" class="overlay hidden">
+        <div class="menu-container">
+            <h2>游戏暂停</h2>
+            <div class="menu-buttons">
+                <button id="control-mode-btn" class="btn">切换控制模式</button>
+                <button id="reconnect-btn" class="btn">重新连接</button>
+                <button id="disconnect-btn" class="btn">断开连接</button>
+                <button id="resume-btn" class="btn primary">继续游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 玩家信息界面 -->
+    <div id="player-info-modal" class="overlay hidden">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>玩家信息</h2>
+                <button id="close-info-btn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="info-item">
+                    <span class="info-label">用户名:</span>
+                    <span id="info-username" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">IP地址:</span>
+                    <span id="info-ip" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">等级:</span>
+                    <span id="info-level" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">积分:</span>
+                    <span id="info-score" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">击杀NPC数:</span>
+                    <span id="info-kills" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">击杀BOSS数:</span>
+                    <span id="info-boss-kills" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">击杀玩家数:</span>
+                    <span id="info-player-kills" class="info-value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 死亡重连界面 -->
+    <div id="death-screen" class="overlay hidden">
+        <div class="menu-container">
+            <h2 class="death-title">您已死亡</h2>
+            <div class="death-info">
+                <p>您已死亡，将自动重连...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 错误提示 -->
+    <div id="error-toast" class="toast hidden">
+        <div class="toast-content">
+            <span id="error-message"></span>
+            <button id="close-error-btn" class="close-btn">&times;</button>
+        </div>
+    </div>
+
+    <!-- 加载脚本 -->
+    <script>
+        // 确保Socket.IO加载完成后再初始化游戏
+        window.addEventListener('load', () => {
+            if (typeof io !== 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'js/game.js';
+                document.body.appendChild(script);
+            } else {
+                document.getElementById('connection-status').textContent = 'Socket.IO加载失败，请检查网络连接';
+                document.getElementById('connection-status').className = 'status-message error';
+            }
+        });
+    </script>
+</body>
+</html>
